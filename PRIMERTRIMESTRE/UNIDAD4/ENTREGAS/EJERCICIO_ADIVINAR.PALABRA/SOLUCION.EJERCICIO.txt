@@ -1,0 +1,141 @@
+import java.util.*;
+class PalabraMisteriosa {  
+  public static void main(String args[]) { 
+  /* Práctica 2: programa que pide encontrar una palabra misteriosa elegida aleatoriamente entre 
+     las que se han declarado en un String. Muestra los caracteres que conforman la palabra según
+     se van acertando al probar con letras. Concede 5 intentos fallidos. */
+    
+	//Declaración de variables
+    String palabraMisteriosa; // Guarda la palabra que tiene que adivinarse
+    String pista = ""; // Conserva los progresos que se han hecho en la adivinación
+	char letraIntento; // Guarda el carácter que introduce el usuario para ver si está en palabraMisteriosa
+	int posicionLetraIntento = -1; // Posición que ocupa letraIntento en palabraMisteriosa
+	int letrasPorRevelar = 0; // Cuenta el número de letras que aún no han sido acertadas
+	int numIntentosHechos = 0, numIntentosRestantes = 5; // Contadores 
+    boolean seguir = true; // Guarda si se debe continuar o no con la ejecución
+    Scanner sc = new Scanner(System.in);
+   
+    
+    
+    
+    palabraMisteriosa = elegirPalabraMisteriosa();    
+	letrasPorRevelar = palabraMisteriosa.length();
+    
+	//Inicialización de pista
+	pista = enmascararString(palabraMisteriosa);
+    	
+    System.out.println("\nTrata de adivinar la palabra misteriosa"); 
+    do {
+        mostrarPista(pista);
+		
+        System.out.println("\n\nIntentos hechos: " + numIntentosHechos + " Fallos restantes: " + numIntentosRestantes);
+		System.out.print("\n\nIntroduce una letra: "); 
+        letraIntento = sc.next().charAt(0); 
+        numIntentosHechos++;
+        posicionLetraIntento = palabraMisteriosa.indexOf(letraIntento);
+        
+        if (posicionLetraIntento == -1) { 
+            //La letra intentada NO pertenece a la palabra misteriosa
+            numIntentosRestantes--;
+        } 
+		else { // La letra intentada SI pertenece a la palabra misteriosa
+               // Hay que actualizar pista
+            pista = actualizarPista(palabraMisteriosa, pista, letraIntento);
+			letrasPorRevelar = actualizarLetrasPorRevelar(pista);
+		}
+		
+		if (numIntentosRestantes == 0 || letrasPorRevelar == 0)
+			seguir = false;
+    } while (seguir);
+    System.out.print("\n\nLa palabra misteriosa era: " + palabraMisteriosa);
+    if (numIntentosRestantes == 0) 
+		System.out.print("\n\nLo siento, has fallado tras " + numIntentosHechos + " intentos");
+	else // letrasPorRevelar == 0
+		System.out.print("\n\nENHORABUENA, has acertado con " + numIntentosHechos + " intentos");
+    } // Del main
+
+	
+	
+	
+	
+	public static String elegirPalabraMisteriosa(){
+	// Devuelve un String seleccionado al azar del String interno palabras
+		
+		int contador = 0;  // Se usa para contar los espacios en el String palabras para extraer la palabraMisteriosa
+		final int NUM_PALABRAS = 29; // Constante con el número-1 de palabras que hay en el String palabras
+		int posicionInicial = 0; // En estos dos enteros se guardan las posiciones que hay que 
+		int posicionFinal = 0;   // copiar de la cadena palabras para obtener palabraMisteriosa
+		boolean finPalabra = false; // Se usa para saber si se ha alcanzado ya el final de la palabra que se va a extraer
+		String resultado = ""; // Almacena el String que devuelve la función
+		String palabras = " golondrina avetoro codorniz garcilla alcotan abubilla perdiz abejaruco vencejo gavilan papamoscas petirrojo colirrojo pechiazul lavandera mosquitero milano aguila roquero estornino treparriscos halcon buitre canastera picapinos gorrion verderon verdecillo buitron bigotudo "; // 30 valores distintos
+		// String que almacena el diccionario de palabras del que se extrae una aleatoriamente
+		
+		//Generar número aleatorio entre 0 y NUM_PALABRAS
+		int numeroAleatorio = (int) (Math.random() * NUM_PALABRAS);
+    
+    
+		// Obtener la palabraMisteriosa de palabras con numAleatorio
+		while (contador < numeroAleatorio){
+			posicionInicial = palabras.indexOf(' ', posicionInicial + 1);
+			contador++;
+		}
+		while (!finPalabra && posicionFinal < palabras.length()){
+			posicionFinal = palabras.indexOf(' ', posicionInicial+ 1);
+			if (posicionFinal != -1)
+				finPalabra = true;
+		}
+		resultado = palabras.substring(posicionInicial + 1, posicionFinal);
+		return resultado;
+		
+	} // De elegirPalabraMisteriosa
+	
+	
+	public static String enmascararString(String cadena){
+	// Devuelve un String de la misma longitud que cadena relleno de caracteres subrayado
+		String resultado = "";
+		for (int i = 0; i < cadena.length(); i++)
+			resultado = resultado + "_"; 
+		return resultado;
+	} // De enmascararString
+	
+	
+	public static void mostrarPista(String pista){
+	// Muestra el parámetro en pantalla
+		System.out.println();
+		for (int i = 0; i < pista.length(); i++)
+			System.out.print(pista.charAt(i) + " "); //Muestra la pista letra a letra
+	} // De mostrarPista 
+	
+	
+	public static String actualizarPista(String palabraMisteriosa, String pista, char letraIntento){
+	// Devuelve un String con los cambios hechos en pista si letraIntento está en palabraMisteriosa
+		int posicionEnEstudio = 0;
+		String pistaParte1 ="";
+		String pistaParte2 ="";
+		
+		for (int i = 0; i < pista.length(); i++) {
+			posicionEnEstudio = palabraMisteriosa.indexOf(letraIntento, i);
+			
+			if (palabraMisteriosa.charAt(i) == letraIntento){ // Hay que sustituir el _ por letraIntento
+				pistaParte1 = pista.substring(0, posicionEnEstudio);
+				pistaParte2 = pista.substring(posicionEnEstudio + 1);
+				pista = pistaParte1 + letraIntento + pistaParte2;
+			}
+			
+		}
+		return pista;
+	} // De actualizarPista
+	
+			
+	
+	public static int actualizarLetrasPorRevelar(String pista){
+	// Cuenta el número de caracteres que aún faltan por ser revelados
+		int numLetrasOcultas= 0;
+		for (int i = 0; i < pista.length(); i++) 
+			if (pista.charAt(i) == '_')
+				numLetrasOcultas++;
+		return numLetrasOcultas;
+	
+	} // De actualizarLetrasPorRevelar
+
+} // De la clase

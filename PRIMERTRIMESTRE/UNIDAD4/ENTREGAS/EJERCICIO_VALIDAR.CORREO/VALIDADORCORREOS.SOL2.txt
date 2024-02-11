@@ -1,0 +1,69 @@
+import java.util.Scanner;
+class REPASANDO{
+  public static void main(String args []){
+    Scanner sc = new Scanner (System.in);
+    boolean salir = false;
+
+    do {
+        System.out.print("Introduce una dirección de correo electrónico: ");
+        String email = sc.nextLine();
+        String parte1 = "", parte2 = "", parte3 = "", parte4 = "";
+
+        boolean valido = false;
+        salir = email.equals("FinPrograma");
+
+        if(!salir){
+            boolean revision = false;
+
+            for(int a = 0; a < email.length(); a++){
+                if(!revision){ //si revision es falsa
+                    char letra = email.charAt(a);
+                    
+                    if ((letra >= 'a' && letra <= 'z' && letra != 'ñ') && (letra >= '0' && letra <= '9') && letra == '.' && letra == '@') {
+                        revision = true;
+                    }
+                }
+            }
+            
+            if(!revision){
+                int separacion1 = email.indexOf('.');
+                int separacion2 = email.indexOf('@');
+                int separacion3 = email.indexOf('.', separacion2);
+
+                if (separacion1 > -1 && separacion2 > -1 && separacion3 > -1) {
+                    parte1 = email.substring(0, separacion1);
+                    parte2 = email.substring(separacion1 + 1, separacion2);
+                    parte3 = email.substring(separacion2 + 1, separacion3);
+                    parte4 = email.substring(separacion3 + 1);
+            
+                    if(parte1.length() >= 3 && parte1.length() <= 12 && parte2.length() >= 3 && parte2.length() <= 12 && parte3.length() >= 5 && parte3.length() <= 15 && (parte4.equals("edu") || parte4.equals("org") || parte4.equals("gov"))){
+                        valido = true;
+                    } else{
+                        valido = false;
+                    }
+
+                }
+
+                else{
+                    valido = false;
+                }
+
+                if(valido){
+                    System.out.println("");
+                    System.out.println("La dirección: " + "\n" + parte1 + " . " + parte2 + " @ " + parte3 + " . " + parte4 + "\n");    
+                    System.out.println("Es una dirección válida" + "\n");
+                } else{
+                    System.out.println("\n" + "La dirección: " + email + " es NO VÁLIDA, esa dirección no queda autorizada." + "\n");
+                }            
+            }
+        }
+
+        else{
+            System.out.println("Programa terminado");
+        }
+
+    } while (!salir);
+    
+    sc.close();
+  }
+}

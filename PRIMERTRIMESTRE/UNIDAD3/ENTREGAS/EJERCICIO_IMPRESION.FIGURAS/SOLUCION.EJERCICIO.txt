@@ -1,0 +1,172 @@
+import java.util.*;
+class Main {  
+  public static void main(String args[]) { 
+	    int opcion = 0;
+	    Scanner sc = new Scanner(System.in);
+	    
+	    // Presentar el menú inicial
+	    do{
+	        System.out.println("\nFiguras disponibles:\n");
+	        System.out.println("\n1 Rectángulo");
+	        System.out.println("\n2 Triángulo");
+	        System.out.println("\n3 Rombo");
+	        System.out.print("\nPulsa el número de la opción deseada: ");    
+	        opcion = sc.nextInt();
+	    } while ((opcion < 1) || (opcion > 3));
+	    
+	    
+	    
+	     // Llamar a la opción deseada
+	    switch (opcion) {
+	            case 1: rectangulo();
+	                break;
+	            case 2: triangulo();
+	                break;
+	            case 3: rombo();
+	                 break;
+	            default: System.out.println("\nOpción no valida: " + opcion);
+	    }
+	    
+	    
+	    sc.close();
+	    
+	  } // Fin del main()
+	  
+	  
+	  
+	  // Función que dibuja un rectángulo
+	  private static void rectangulo() {
+	        int base = 0, altura = 0;
+	        Scanner sc = new Scanner(System.in);
+	        do{
+	            System.out.print("\n\nIntroduzca la longitud de la base:     "); 
+	            base = sc.nextInt();
+	            System.out.println();
+	            if (base < 0)   
+	                System.out.print("\n\nERROR: la longitud ha de ser positiva: ");
+	        } while (base < 0);
+	        
+	        do{
+	            System.out.print("Introduzca la longitud de la altura: "); 
+	            altura = sc.nextInt();
+	            System.out.println();
+	            if (altura < 0)   
+	                System.out.print("\n\nERROR: la longitud ha de ser positiva: ");
+	        } while (altura < 0);
+	        sc.close();
+	        
+	        for(int i = 0; i < base; i++){ // Se imprime el lado superior
+	            System.out.print("*");
+	        }
+	        System.out.println();
+	        for(int i = 1; i < altura-1; i++){
+	        
+	            for(int j = 0; j < base; j++){ // Imprime los lados verticales
+	                if (j == 0)
+	                    System.out.print("*");
+	                else { 
+	                    if (j == base-1)
+	                        System.out.println("*");
+	                    else
+	                        System.out.print(" ");
+	                }
+	            }
+	        }
+	        for(int i = 0; i < base; i++){ // Se imprime el lado inferior
+	            System.out.print("*");
+	        }
+	        System.out.println();
+		    System.out.println();
+	        System.out.println("Rectángulo terminado");
+	        return;
+	    } // Fin de rectangulo()
+	    
+	    
+	    private static void triangulo() { 
+	    // Función para dibujar un triángulo
+	    Scanner sc = new Scanner(System.in);
+	    int base = 0, altura = 0;
+	    do{
+	            System.out.print("\n\nIntroduzca un valor impar para la longitud de la base:     "); 
+	            base = sc.nextInt();
+	            System.out.println();
+	            if ((base < 0) || (base % 2 != 1))   
+	                System.out.print("\n\nERROR: la longitud ha de ser positiva e impar ");
+	    } while ((base < 0) || (base % 2 != 1));
+	    sc.close();
+	    
+	    altura = (base-1)/2; 
+	        
+	    for(int i = 0; i < base-1; i++){ // Se imprimen los lados descendentes
+	        for(int j = 0; j < base; j++){ 
+	            if (((i + j  == altura) || (j - i  == altura)) && (i< altura))
+	                System.out.print("*");
+	            else
+	                if (i < altura)
+	                    System.out.print(" ");
+	        } 
+	        if (i < altura)
+	            System.out.println();
+	    }
+	    for(int i = 0; i < base; i++){ // Se imprime la base 
+	        System.out.print("*");
+	    }
+	    System.out.println();
+		System.out.println();
+	    System.out.println("Triángulo terminado");
+	    
+	  } // Fin de triangulo()
+	  
+	  
+	  private static void rombo() { 
+    // Función para dibujar un rombo
+		Scanner sc = new Scanner(System.in);
+		int base = 0, altura = 0;
+		
+        
+		do{
+	            System.out.print("\n\nIntroduzca un valor impar para la longitud del lado:     "); 
+	            base = sc.nextInt();
+	            System.out.println();
+	            if ((base < 0) || (base % 2 != 1))   
+	                System.out.print("\n\nERROR: la longitud ha de ser positiva e impar ");
+	    } while ((base < 0) || (base % 2 != 1));
+		altura = (base-1)/2;
+		sc.close();
+		
+		for(int i = 0; i < base-1; i++){ // Se imprimen los lados superiores
+			for(int j = 0; j < base; j++){ 
+				if (((i + j  == altura) || (j - i  == altura)) && (i< altura))
+					System.out.print("*");
+				else
+					if (i < altura)
+						System.out.print(" ");
+			} 
+			if (i < altura)
+				System.out.println();
+		}
+		for(int i = 0; i < base; i++){ // Se imprime la parte más ancha 
+			if ((i == 0) || (i == base - 1))
+					System.out.print("*");
+			else
+				System.out.print(" ");
+		}
+		System.out.println();
+		for(int i = base-1; i >= 0 ; i--){ // Se imprimen los lados inferiores
+			for(int j = 0; j < base; j++){ 
+				if (((i + j == altura) || (j - i == altura)) && (i< altura))
+					System.out.print("*");
+				else
+					if (i < altura)
+						System.out.print(" ");
+			} 
+			if (i < altura)
+				System.out.println();
+		}
+		System.out.println();
+		System.out.println("Rombo terminado");
+		
+	} // Fin de rombo()
+	  
+	  
+} // Fin de la clase
