@@ -28,28 +28,29 @@ class Wordle{
         "UNIDA", "USUAL", "VELOZ", "VERAZ", "VERDE", "VIEJO", "VIEJA", "VIVAZ",
         "VORAZ"}; // 150 términos
     
-        String palDic = diccionario[((int)(rnd.nextDouble() * (diccionario.length)))];
-        String palFinal = cambiarFormato(palDic);
-        String cadAvance = ocultarPalabra(palFinal);
+        String palDic = diccionario[((int)(rnd.nextDouble() * (diccionario.length)))]; //linea encargada de seleccionar una palabra del diccionaria
+        String palFinal = cambiarFormato(palDic); //cambiamos la palabra a mayusculas y le asignamos un formato para simplificar el trabajo
+        String cadAvance = ocultarPalabra(palFinal); //ocultamos la palabra con guiones para que el usuario
         int contIntentos = 0;
         boolean victoria = false;
         System.out.println("\t" + "   Trata de adivinar la palabra oculta" + "\n");
         System.out.println("\t \t \t" + cadAvance + "\n \n");
+
         //System.out.println(palDic); Esta linea servirá para saber la palabra a adivinar
 
         do{
             System.out.print("\t \t \t");
-            String intento = sc.nextLine();
-            intento = alterarIntento(intento);
-            cadAvance = comprobandoIntento(intento, palFinal, cadAvance);
-            cadAvance = contieneCaracter(intento, palFinal, cadAvance);
+            String intento = sc.nextLine(); //abrimos el scanner
+            intento = alterarIntento(intento); //revisamos la cadena ingresada por el usuario extrayendo las vocales acentuadas
+            cadAvance = comprobandoIntento(intento, palFinal, cadAvance); //con esta funcion vamos actualizando la pista segun los aciertos del usuario
+            cadAvance = contieneCaracter(intento, palFinal, cadAvance); //con esta funcion vamos actualizando la pista segun los casi-aciertos del usuario
             System.out.println("\n");
-            System.out.print("\t \t     " + (contIntentos+1) + " : " + cadAvance + "\n \n");
+            System.out.print("\t \t     " + (contIntentos+1) + " : " + cadAvance + "\n \n"); //mostramos la actualizacion de la pista
 
-            if(intento.equals(palDic)){
+            if(intento.equals(palDic)){ //si el usuario introduce la palabra adivinada el booleano finalizará el bucle
                 victoria = true;
             }
-            contIntentos++;
+            contIntentos++; //esta variable se aumentará por cada intento
         }while(contIntentos<6 && victoria == false);
 
         System.out.println("La palabra buscada era : " + palDic + "\n");
@@ -60,10 +61,10 @@ class Wordle{
         }
 
         System.out.println("Programa terminado");
-        sc.close();
+        sc.close(); //se cierra el scanner
     }
 
-    public static String cambiarFormato(String palabra){
+    public static String cambiarFormato(String palabra){ //esta funcion cambia el formato de cada palabra, tal que así: X X X X X
         String resultado = "";
 
         if(palabra.length()>5){
@@ -80,7 +81,7 @@ class Wordle{
         return resultado;
     }
 
-    public static String ocultarPalabra(String palabra){
+    public static String ocultarPalabra(String palabra){ //por cada caracter de la palabra se introducirá un guion bajo para ocultarla
         String resultado = "";
         for(int a=0;a<palabra.length();a++){
             if(a!=palabra.length()-1){
@@ -94,7 +95,7 @@ class Wordle{
         return resultado;
     }
 
-    public static String alterarIntento(String palabra){
+    public static String alterarIntento(String palabra){ //buscamos las vocales tildadas, las reemplazamos y por ultimo la convertimos a mayusculas
         palabra=palabra.replace('á', 'a');
         palabra=palabra.replace('é', 'e');
         palabra=palabra.replace('í', 'i');
@@ -104,31 +105,31 @@ class Wordle{
         return palabra;
     }
 
-    public static String comprobandoIntento(String intento, String palFinal, String cadAvance){
+    public static String comprobandoIntento(String intento, String palFinal, String cadAvance){ //se encarga de actualizar la pista por cada que el usuario acierte una letra
         cadAvance = ocultarPalabra(cadAvance);
-        intento = cambiarFormato(intento);
+        intento = cambiarFormato(intento);  //cambiamos el formato del intento del usuario
 
-        for(int a=0; a<intento.length(); a+=2){
-            if(palFinal.charAt(a) == intento.charAt(a)){
-                if(a==0){
-                    cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
-                } else{
-                    cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
+        for(int a=0; a<intento.length(); a+=2){ //usamos un bucle para comparar caracteres en una misma posicion
+            if(palFinal.charAt(a) == intento.charAt(a)){ //en caso de que sean iguales
+                if(a==0){ //si está en la posicion inicial
+                    cadAvance = intento.charAt(a) + cadAvance.substring(a+1); //manejamos el substring añadiendo el caracter revelado en la misma posicion
+                } else{ //en otras posiciones
+                    cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1); //manejamos dos substrings añadiendo el caracter revelado
                 }
             }
         }
         return cadAvance;
     }
 
-    public static String contieneCaracter(String intento, String palFinal, String cadAvance){
+    public static String contieneCaracter(String intento, String palFinal, String cadAvance){ //se encarga de actualizar la pista por cada que el usuario ingrese una letra en una posicion equivocada
         intento = cambiarFormato(intento);
 
         for(int a=0; a<palFinal.length();a+=2){
             for(int b=0;b<intento.length();b+=2){
-                if(palFinal.charAt(a) == intento.charAt(b)){
-                    if(cadAvance.charAt(b) == '_'){
-                        int posicion = intento.indexOf(intento.charAt(b));
-                        cadAvance = cadAvance.substring(0, posicion) + '*' + cadAvance.substring(posicion+1);
+                if(palFinal.charAt(a) == intento.charAt(b)){ //usamos un bucle anidado para buscar si encontramos alguna letra en alguna posicion equivocada
+                    if(cadAvance.charAt(b) == '_'){ //nos aseguramos de que la posicion no haya sido revelada
+                        int posicion = intento.indexOf(intento.charAt(b)); //nos dirá la posicion del casi acierto
+                        cadAvance = cadAvance.substring(0, posicion) + '*' + cadAvance.substring(posicion+1); //con la posicion sabremos hasta donde recortar el string e introducir un *
                     }
                 }
             }
