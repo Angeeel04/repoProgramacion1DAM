@@ -104,24 +104,34 @@ class Wordle1 {
             intento = cambiarFormato(intento);
 
             for(int a=0; a<intento.length(); a++){
-
                 if(a%2==0){
                     if(palFinal.charAt(a) == intento.charAt(a)){
                         if(a==0){
                             cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
-                        }
-                        
-                        else if(a==intento.length()-1){
+                        } else if(a==intento.length()-1){
                             cadAvance = cadAvance.substring(0,a) + intento.charAt(a);
-                        }
-                        
-                        else{
+                        } else{
                             cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
                         }
                         
                     } 
-                }
+                }   
+            }
+        } else{
+            intento = cambiarFormato(intento);
 
+            for(int a=0; a<intento.length(); a++){
+                if(a%2==0){
+                    if(palFinal.charAt(a) == intento.charAt(a)){
+                        if(a==0){
+                            cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
+                        } else if(a==intento.length()-1){
+                            cadAvance = cadAvance.substring(0,a) + intento.charAt(a);
+                        } else{
+                            cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
+                        }
+                    }
+                }
             }
         }
         return cadAvance;
