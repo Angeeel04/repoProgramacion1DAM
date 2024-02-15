@@ -74,9 +74,14 @@ class Wordle1 {
     public static String ocultarPalabra(String palabra){
         String resultado = "";
         for(int a=0;a<palabra.length();a++){
-            if(palabra.charAt(a)!=' '){
+            if(a!=palabra.length()-1){
+                if(palabra.charAt(a)!=' '){
+                    resultado += "_ ";
+                } 
+            } else{
                 resultado += "_";
-            } 
+            }
+
         }
         return resultado;
     }
