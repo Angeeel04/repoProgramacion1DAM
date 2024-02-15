@@ -41,12 +41,13 @@ class Wordle1 {
             String intento = sc.nextLine();
             intento = alterarIntento(intento);
             cadAvance = comprobandoIntento(intento, palFinal, cadAvance);
+            cadAvance = contieneCaracter(intento, palFinal, cadAvance);
 
             if(intento.equals(palDic)){
                 victoria = true;
             }
             contIntentos++;
-        }while(contIntentos<=6 && victoria == false);
+        }while(contIntentos<6 && victoria == false);
 
         System.out.println("La palabra buscada era : " + palDic);
         if(victoria){
@@ -125,10 +126,25 @@ class Wordle1 {
                     if(palFinal.charAt(a) == intento.charAt(a)){
                         if(a==0){
                             cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
-                        } else if(a==intento.length()-1){
-                            cadAvance = cadAvance.substring(0,a) + intento.charAt(a);
                         } else{
                             cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
+                        }
+                    }
+                }
+            }
+        }
+        return cadAvance;
+    }
+
+    public static String contieneCaracter(String intento, String palFinal, String cadAvance){
+        intento = cambiarFormato(intento);
+        for(int a=0; a<palFinal.length();a++){
+            for(int b=0;b<intento.length();b++){
+                if(a%2==0 && b%2==0){
+                    if(palFinal.charAt(a) == intento.charAt(b)){
+                        if(cadAvance.charAt(a) == '_'){
+                            int posicion = intento.indexOf(intento.charAt(b));
+                        cadAvance = cadAvance.substring(0, posicion) + '*' + cadAvance.substring(posicion+1);
                         }
                     }
                 }
