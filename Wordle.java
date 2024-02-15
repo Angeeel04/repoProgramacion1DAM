@@ -1,9 +1,10 @@
 import java.util.Random;
 import java.util.Scanner;
 
-class Wordle {
+class Wordle{
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        Random rnd = new Random();
 
         // Diccionario de palabras del que se extrae el término a adivinar
         String [] diccionario = {"AGRIO", "AGRIA", "AGUDO", "AGUDA", "ALADO",
@@ -26,78 +27,112 @@ class Wordle {
         "TORPE", "TOSCO", "TOSCA", "UFANO", "UFANA", "UNICO", "UNICA", "UNIDO",
         "UNIDA", "USUAL", "VELOZ", "VERAZ", "VERDE", "VIEJO", "VIEJA", "VIVAZ",
         "VORAZ"}; // 150 términos
-        boolean prueba = false;
-        
-        Random rnd = new Random();
-        int numRnd = (int)(rnd.nextDouble() * (diccionario.length));
-        String palabraDic = diccionario[numRnd];
-        String pista = encubrirPalabra(palabraDic);
-        int contIntentos = 1;
+    
+        String palDic = diccionario[((int)(rnd.nextDouble() * (diccionario.length)))];
+        String palFinal = cambiarFormato(palDic);
+        String cadAvance = ocultarPalabra(palFinal);
+        int contIntentos = 0;
+        boolean victoria = false;
+        System.out.println("\t" + "   Trata de adivinar la palabra oculta" + "\n");
+        System.out.println("\t \t \t" + cadAvance + "\n \n");
+        //System.out.println(palDic); Esta linea servirá para saber la palabra a adivinar
 
-        System.out.println("Trata de adivinar la palabra oculta: ");
-        System.out.println("\t \t" + pista+ "\n \n");
         do{
-            System.out.print("\t \t");
-            String intentoUsuario = sc.nextLine().substring(0,5);
-            intentoUsuario = alterandoCadena(intentoUsuario);
-            pista = revisandoAciertos(palabraDic, intentoUsuario, pista);
+            System.out.print("\t \t \t");
+            String intento = sc.nextLine();
+            intento = alterarIntento(intento);
+            cadAvance = comprobandoIntento(intento, palFinal, cadAvance);
+            cadAvance = contieneCaracter(intento, palFinal, cadAvance);
+            System.out.println("\n");
+            System.out.print("\t \t     " + (contIntentos+1) + " : " + cadAvance + "\n \n");
 
-            System.out.println("\n" + "\t     " + contIntentos + " : " + pista + "\n");
+            if(intento.equals(palDic)){
+                victoria = true;
+            }
             contIntentos++;
+        }while(contIntentos<6 && victoria == false);
 
-        }while(contIntentos <= 6);
+        System.out.println("La palabra buscada era : " + palDic + "\n");
+        if(victoria){
+            System.out.println("ENHORABUENA, HAS ACERTADO EN TU INTENTO NUMERO " + contIntentos + "\n");
+        } else{
+            System.out.println("Esta vez no has acertado. Mucha suerte en tu próxima vez." + "\n");
+        }
 
         System.out.println("Programa terminado");
-
+        sc.close();
     }
 
-    public static String encubrirPalabra(String palabra){
-        String pistas = "";
+    public static String cambiarFormato(String palabra){
+        String resultado = "";
 
-        for(int a=0; a<palabra.length(); a++){
-            pistas += "_";
-
-            if(a!=palabra.length()-1)
-                pistas += " ";
+        if(palabra.length()>5){
+            palabra=palabra.substring(0,5);
         }
-        return pistas;
+
+        for(int a=0;a<palabra.length();a++){
+            if(a!=(palabra.length()-1)){
+                resultado += palabra.charAt(a) +" ";
+            } else{
+                resultado += palabra.charAt(a);
+            }
+        }
+        return resultado;
     }
 
-    public static String alterandoCadena(String palabra){
-        palabra = palabra.replace('á','a');
-        palabra = palabra.replace('é','e');
-        palabra = palabra.replace('í','i');
-        palabra = palabra.replace('ó','o');
-        palabra = palabra.replace('ú','u');
-        palabra = palabra.toUpperCase();
+    public static String ocultarPalabra(String palabra){
+        String resultado = "";
+        for(int a=0;a<palabra.length();a++){
+            if(a!=palabra.length()-1){
+                if(palabra.charAt(a)!=' '){
+                    resultado += "_ ";
+                } 
+            } else{
+                resultado += "_";
+            }
+        }
+        return resultado;
+    }
+
+    public static String alterarIntento(String palabra){
+        palabra=palabra.replace('á', 'a');
+        palabra=palabra.replace('é', 'e');
+        palabra=palabra.replace('í', 'i');
+        palabra=palabra.replace('ó', 'o');
+        palabra=palabra.replace('ú', 'u');
+        palabra=palabra.toUpperCase();
         return palabra;
     }
 
-    public static String revisandoAciertos(String palabraDic, String intento, String pista){
-        if(palabraDic.length()>=5){
-            for(int a=0; a<palabraDic.length(); a++){
-                if(palabraDic.charAt(a) == intento.charAt(a)){
-                    if(a==0){
-                        pista = intento.charAt(a) + pista.substring((a*2)+1);
-                    }
-                    
-                    else if(a==palabraDic.length()-1){
-                        pista = pista.substring(0,(a*2)) + intento.charAt(a);
-                    }
-                    
-                    else{
-                        pista = pista.substring(0,a*2) + intento.charAt(a) + pista.substring((a*2)+1);
-                    }
-                    
-                } 
+    public static String comprobandoIntento(String intento, String palFinal, String cadAvance){
+        cadAvance = ocultarPalabra(cadAvance);
+        intento = cambiarFormato(intento);
+
+        for(int a=0; a<intento.length(); a+=2){
+            if(palFinal.charAt(a) == intento.charAt(a)){
+                if(a==0){
+                    cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
+                } else{
+                    cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
+                }
             }
-        } else{
-            
         }
-
-        
-
-
-        return pista;
+        return cadAvance;
     }
-} 
+
+    public static String contieneCaracter(String intento, String palFinal, String cadAvance){
+        intento = cambiarFormato(intento);
+
+        for(int a=0; a<palFinal.length();a+=2){
+            for(int b=0;b<intento.length();b+=2){
+                if(palFinal.charAt(a) == intento.charAt(b)){
+                    if(cadAvance.charAt(b) == '_'){
+                        int posicion = intento.indexOf(intento.charAt(b));
+                        cadAvance = cadAvance.substring(0, posicion) + '*' + cadAvance.substring(posicion+1);
+                    }
+                }
+            }
+        }
+        return cadAvance;
+    }
+}
