@@ -33,15 +33,18 @@ class Wordle1 {
         String cadAvance = ocultarPalabra(palFinal);
         int contIntentos = 0;
         boolean victoria = false;
-        System.out.println("\t" + "Trata de adivinar la palabra oculta" + "\n");
+        System.out.println("\t" + "   Trata de adivinar la palabra oculta" + "\n");
+        System.out.println("\t \t \t" + cadAvance + "\n \n");
         System.out.println(palDic);
 
         do{
-            System.out.print("\t \t" + (contIntentos+1) + " : " + cadAvance + "\n \n \t \t    ");
+            System.out.print("\t \t \t");
             String intento = sc.nextLine();
             intento = alterarIntento(intento);
             cadAvance = comprobandoIntento(intento, palFinal, cadAvance);
-            //cadAvance = contieneCaracter(intento, palFinal, cadAvance);
+            cadAvance = contieneCaracter(intento, palFinal, cadAvance);
+            System.out.println("\n");
+            System.out.print("\t \t     " + (contIntentos+1) + " : " + cadAvance + "\n \n");
 
             if(intento.equals(palDic)){
                 victoria = true;
@@ -49,11 +52,11 @@ class Wordle1 {
             contIntentos++;
         }while(contIntentos<6 && victoria == false);
 
-        System.out.println("La palabra buscada era : " + palDic);
+        System.out.println("La palabra buscada era : " + palDic + "\n");
         if(victoria){
-            System.out.println("ENHORABUENA, HAS ACERTADO EN TU INTENTO NUMERO " + contIntentos);
+            System.out.println("ENHORABUENA, HAS ACERTADO EN TU INTENTO NUMERO " + contIntentos + "\n");
         } else{
-            System.out.println("Esta vez no has acertado. Mucha suerte en tu próxima vez.");
+            System.out.println("Esta vez no has acertado. Mucha suerte en tu próxima vez." + "\n");
         }
 
         System.out.println("Programa terminado");
@@ -62,6 +65,11 @@ class Wordle1 {
 
     public static String cambiarFormato(String palabra){
         String resultado = "";
+
+        if(palabra.length()>5){
+            palabra=palabra.substring(0,5);
+        }
+
         for(int a=0;a<palabra.length();a++){
             if(a!=(palabra.length()-1)){
                 resultado += palabra.charAt(a) +" ";
@@ -99,30 +107,14 @@ class Wordle1 {
 
     public static String comprobandoIntento(String intento, String palFinal, String cadAvance){
         cadAvance = ocultarPalabra(cadAvance);
+        intento = cambiarFormato(intento);
 
-        if(intento.length()>=5){
-            intento = intento.substring(0, 5);
-            intento = cambiarFormato(intento);
-
-            for(int a=0; a<intento.length(); a+=2){
-                if(palFinal.charAt(a) == intento.charAt(a)){
-                    if(a==0){
-                        cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
-                    } else{
-                        cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
-                    }
-                }
-            }   
-        } else{
-            intento = cambiarFormato(intento);
-
-            for(int a=0; a<intento.length(); a+=2){
-                if(palFinal.charAt(a) == intento.charAt(a)){
-                    if(a==0){
-                        cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
-                    } else{
-                        cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
-                    }
+        for(int a=0; a<intento.length(); a+=2){
+            if(palFinal.charAt(a) == intento.charAt(a)){
+                if(a==0){
+                    cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
+                } else{
+                    cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
                 }
             }
         }
@@ -131,7 +123,7 @@ class Wordle1 {
 
     public static String contieneCaracter(String intento, String palFinal, String cadAvance){
         intento = cambiarFormato(intento);
-        
+
         for(int a=0; a<palFinal.length();a+=2){
             for(int b=0;b<intento.length();b+=2){
                 if(palFinal.charAt(a) == intento.charAt(b)){
