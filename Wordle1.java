@@ -41,7 +41,7 @@ class Wordle1 {
             String intento = sc.nextLine();
             intento = alterarIntento(intento);
             cadAvance = comprobandoIntento(intento, palFinal, cadAvance);
-            cadAvance = contieneCaracter(intento, palFinal, cadAvance);
+            //cadAvance = contieneCaracter(intento, palFinal, cadAvance);
 
             if(intento.equals(palDic)){
                 victoria = true;
@@ -104,31 +104,24 @@ class Wordle1 {
             intento = intento.substring(0, 5);
             intento = cambiarFormato(intento);
 
-            for(int a=0; a<intento.length(); a++){
-                if(a%2==0){
-                    if(palFinal.charAt(a) == intento.charAt(a)){
-                        if(a==0){
-                            cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
-                        } else if(a==intento.length()-1){
-                            cadAvance = cadAvance.substring(0,a) + intento.charAt(a);
-                        } else{
-                            cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
-                        }
-                        
-                    } 
-                }   
-            }
+            for(int a=0; a<intento.length(); a+=2){
+                if(palFinal.charAt(a) == intento.charAt(a)){
+                    if(a==0){
+                        cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
+                    } else{
+                        cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
+                    }
+                }
+            }   
         } else{
             intento = cambiarFormato(intento);
 
-            for(int a=0; a<intento.length(); a++){
-                if(a%2==0){
-                    if(palFinal.charAt(a) == intento.charAt(a)){
-                        if(a==0){
-                            cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
-                        } else{
-                            cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
-                        }
+            for(int a=0; a<intento.length(); a+=2){
+                if(palFinal.charAt(a) == intento.charAt(a)){
+                    if(a==0){
+                        cadAvance = intento.charAt(a) + cadAvance.substring(a+1);
+                    } else{
+                        cadAvance = cadAvance.substring(0,a) + intento.charAt(a) + cadAvance.substring(a+1);
                     }
                 }
             }
@@ -138,14 +131,13 @@ class Wordle1 {
 
     public static String contieneCaracter(String intento, String palFinal, String cadAvance){
         intento = cambiarFormato(intento);
-        for(int a=0; a<palFinal.length();a++){
-            for(int b=0;b<intento.length();b++){
-                if(a%2==0 && b%2==0){
-                    if(palFinal.charAt(a) == intento.charAt(b)){
-                        if(cadAvance.charAt(a) == '_'){
-                            int posicion = intento.indexOf(intento.charAt(b));
+        
+        for(int a=0; a<palFinal.length();a+=2){
+            for(int b=0;b<intento.length();b+=2){
+                if(palFinal.charAt(a) == intento.charAt(b)){
+                    if(cadAvance.charAt(a) == '_'){
+                        int posicion = intento.indexOf(intento.charAt(b));
                         cadAvance = cadAvance.substring(0, posicion) + '*' + cadAvance.substring(posicion+1);
-                        }
                     }
                 }
             }
